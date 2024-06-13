@@ -1,18 +1,18 @@
 import '../../../../core/utils/todo_storage_service.dart';
-import '../../domain/entities/todo_entity.dart';
+import '../models/todo_model.dart';
 
 abstract class MainLocalDataSource {
-  save(TodoEntity entity, {String? boxName});
+  save(TodoModel entity, {String? boxName});
 
-  saveNewList(List<TodoEntity> listTodo);
+  saveNewList(List<TodoModel> listTodo);
 
-  Future<List<TodoEntity>> getListTodo({String? boxName});
+  Future<List<TodoModel>> getListTodo({String? boxName});
 
-  Future<void> updateTodo(TodoEntity entity);
+  Future<void> updateTodo(TodoModel entity);
 
-  deleteTodos(List<TodoEntity> data, String boxName);
+  deleteTodos(List<TodoModel> data, String boxName);
 
-  deleteTodo(TodoEntity entity, String boxName);
+  deleteTodo(TodoModel entity, String boxName);
 
   deleteDataFromBox(String boxName);
 }
@@ -28,34 +28,34 @@ class MainLocalDataSourceImpl implements MainLocalDataSource {
   }
 
   @override
-  deleteTodo(TodoEntity entity, String boxName) async {
+  deleteTodo(TodoModel entity, String boxName) async {
     await todoStorageService.deleteTodo(entity, boxName);
   }
 
   @override
-  deleteTodos(List<TodoEntity> data, String boxName) async {
+  deleteTodos(List<TodoModel> data, String boxName) async {
     await todoStorageService.deleteTodos(data, boxName);
   }
 
   @override
-  Future<List<TodoEntity>> getListTodo({String? boxName}) async {
+  Future<List<TodoModel>> getListTodo({String? boxName}) async {
     final response = await todoStorageService.getListTodo(boxName: boxName);
 
     return response;
   }
 
   @override
-  save(TodoEntity entity, {String? boxName}) async {
+  save(TodoModel entity, {String? boxName}) async {
     await todoStorageService.save(entity, boxName: boxName);
   }
 
   @override
-  saveNewList(List<TodoEntity> listTodo) async {
+  saveNewList(List<TodoModel> listTodo) async {
     await todoStorageService.saveNewList(listTodo);
   }
 
   @override
-  Future<void> updateTodo(TodoEntity entity) async {
+  Future<void> updateTodo(TodoModel entity) async {
     await todoStorageService.updateTodo(entity);
   }
 }

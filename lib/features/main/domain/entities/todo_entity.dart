@@ -44,13 +44,11 @@ class TodoEntity {
   }
 
   @override
-  String toString() {
-    return """
+  String toString() => """
     id : $id
     title : $title
     description : $description
     createdAt : $createdAt
     isDone : $isDone
     """;
-  }
 }

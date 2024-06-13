@@ -1,17 +1,22 @@
+import 'package:dartz/dartz.dart';
+
+import '../../../../core/entities/app_error.dart';
 import '../entities/todo_entity.dart';
 
 abstract class MainRepository {
-  save(TodoEntity entity, {String? boxName});
+  Future<Either<AppError, void>> save(TodoEntity entity,
+      {required String boxName});
 
-  saveNewList(List<TodoEntity> listTodo);
+  Future<Either<AppError, void>> saveNewList(List<TodoEntity> listTodo);
 
-  Future<List<TodoEntity>> getListTodo({String? boxName});
+  Future<Either<AppError, List<TodoEntity>>> getListTodo({String? boxName});
 
-  Future<void> updateTodo(TodoEntity entity);
+  Future<Either<AppError, void>> updateTodo(TodoEntity entity);
 
-  deleteTodos(List<TodoEntity> data, String boxName);
+  Future<Either<AppError, void>> deleteTodos(
+      List<TodoEntity> data, String boxName);
 
-  deleteTodo(TodoEntity entity, String boxName);
+  Future<Either<AppError, void>> deleteTodo(TodoEntity entity, String boxName);
 
-  deleteDataFromBox(String boxName);
+  Future<Either<AppError, void>> deleteDataFromBox(String boxName);
 }
