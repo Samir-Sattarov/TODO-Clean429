@@ -41,18 +41,24 @@ class DeleteTodoUsecase extends UseCase<void, DeleteTodoUsecaseParams> {
   }
 }
 
-class ClearCompletedTodoUsecase extends UseCase<void, NoParams> {
+class DeleteListTodoUsecase extends UseCase<void, DeleteListTodoUsecaseParams> {
   final MainRepository repository;
 
-  ClearCompletedTodoUsecase(this.repository);
+  DeleteListTodoUsecase(this.repository);
 
   @override
-  Future<Either<AppError, void>> call(NoParams params) {
-    return repository.deleteDataFromBox(StorageBoxes.completedTodos);
+  Future<Either<AppError, void>> call(DeleteListTodoUsecaseParams params) {
+    return repository.deleteTodos(params.data);
   }
 }
 
 // ================ Params ================ //
+
+class DeleteListTodoUsecaseParams {
+  final List<TodoEntity> data;
+
+  DeleteListTodoUsecaseParams(this.data);
+}
 
 class GetListTodoUsecaseParams {}
 

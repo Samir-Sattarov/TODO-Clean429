@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/utils/error_flush_bar.dart';
+import '../../domain/entities/todo_entity.dart';
 import '../cubits/completed_todo/completed_todo_cubit.dart';
 import '../widgets/todo_card_widget.dart';
 
@@ -14,8 +15,13 @@ class CompletedTodosScreen extends StatefulWidget {
 }
 
 class _CompletedTodosScreenState extends State<CompletedTodosScreen> {
+ late  List<TodoEntity> listTodo;
   @override
   void initState() {
+
+
+
+    listTodo = [];
     BlocProvider.of<CompletedTodoCubit>(context).load();
     super.initState();
   }
@@ -32,7 +38,7 @@ class _CompletedTodosScreenState extends State<CompletedTodosScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              BlocProvider.of<CompletedTodoCubit>(context).clear();
+              BlocProvider.of<CompletedTodoCubit>(context).clear(listTodo);
             },
             icon: const Icon(Icons.delete_forever, color: Colors.white),
           ),
@@ -49,9 +55,14 @@ class _CompletedTodosScreenState extends State<CompletedTodosScreen> {
           if (state is CompletedTodoError) {
             ErrorFlushBar(state.message).show(context);
           }
+          if (state is CompletedTodoLoaded) {
+            listTodo = state.data;
+
+            print("Completed todo ${listTodo.length}");
+
+          }
         },
         builder: (context, state) {
-          print(state);
           if (state is CompletedTodoLoading) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -60,35 +71,32 @@ class _CompletedTodosScreenState extends State<CompletedTodosScreen> {
             return Center(child: Text(state.message));
           }
 
-          if (state is CompletedTodoLoaded) {
-            final listTodo = state.data;
 
-            print("Completed todo ${listTodo.length}");
-            return RefreshIndicator(
-              onRefresh: () async {
-                BlocProvider.of<CompletedTodoCubit>(context).load();
-              },
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: ListView.separated(
-                  itemCount: listTodo.length,
-                  itemBuilder: (context, index) {
-                    final todo = listTodo[index].copyWith(isDone: true);
 
-                    return AbsorbPointer(
-                      child: TodoCardWidget(
-                        entity: todo,
-                        isMenuActive: false,
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const SizedBox(height: 10),
-                ),
+          return RefreshIndicator(
+            onRefresh: () async {
+              BlocProvider.of<CompletedTodoCubit>(context).load();
+            },
+            child: Padding(
+              padding:
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: ListView.separated(
+                itemCount: listTodo.length,
+                itemBuilder: (context, index) {
+                  final todo = listTodo[index].copyWith(isDone: true);
+
+                  return AbsorbPointer(
+                    child: TodoCardWidget(
+                      entity: todo,
+                      isMenuActive: false,
+                    ),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                const SizedBox(height: 10),
               ),
-            );
-          }
+            ),
+          );
 
           return const SizedBox();
         },

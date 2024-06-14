@@ -7,17 +7,14 @@ import '../models/todo_model.dart';
 abstract class MainRemoteDataSource {
   save(TodoModel model);
 
-  saveNewList(List<TodoModel> listTodo);
 
   Future<List<TodoModel>> getListTodo();
 
-  Future<void> updateTodo(TodoModel entity);
 
-  deleteTodos(List<TodoModel> data, String boxName);
+  deleteTodos(List<TodoModel> data);
 
   deleteTodo(TodoModel entity);
 
-  deleteDataFromBox(String boxName);
 }
 
 class MainRemoteDataSourceImpl implements MainRemoteDataSource {
@@ -26,20 +23,21 @@ class MainRemoteDataSourceImpl implements MainRemoteDataSource {
   MainRemoteDataSourceImpl(this._client);
 
   @override
-  deleteDataFromBox(String boxName) async {}
-
-  @override
   deleteTodo(TodoModel entity) async {
     await _client.delete(FirebaseCollections.todos, id: entity.id);
   }
 
   @override
-  deleteTodos(List<TodoModel> data, String boxName) async {}
+  deleteTodos(List<TodoModel> data) async {
+    final listId = data.map((element) => element.id).toList();
+    await _client.deleteListDataFromCollection(
+        FirebaseCollections.todos, listId: listId);
+  }
 
   @override
   Future<List<TodoModel>> getListTodo() async {
     final response =
-        await _client.getAllDocumentsFromCollection(FirebaseCollections.todos);
+    await _client.getAllDocumentsFromCollection(FirebaseCollections.todos);
 
     final List<TodoModel> listModel = [];
 
@@ -60,10 +58,5 @@ class MainRemoteDataSourceImpl implements MainRemoteDataSource {
       id: model.id,
     );
   }
-
-  @override
-  saveNewList(List<TodoModel> listTodo) async {}
-
-  @override
-  Future<void> updateTodo(TodoModel entity) async {}
 }
+

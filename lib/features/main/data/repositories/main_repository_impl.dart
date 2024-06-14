@@ -17,11 +17,6 @@ class MainRepositoryImpl implements MainRepository {
   MainRepositoryImpl(this.localDataSource, this.remoteDataSource);
 
   @override
-  Future<Either<AppError, void>> deleteDataFromBox(String boxName) async {
-    return action(task: localDataSource.deleteDataFromBox(boxName));
-  }
-
-  @override
   Future<Either<AppError, void>> deleteTodo(
       TodoEntity entity) async {
     return action(
@@ -31,11 +26,11 @@ class MainRepositoryImpl implements MainRepository {
 
   @override
   Future<Either<AppError, void>> deleteTodos(
-      List<TodoEntity> data, String boxName) async {
+      List<TodoEntity> data) async {
     final List<TodoModel> listModels =
         data.map((element) => TodoModel.fromEntity(element)).toList();
 
-    return action(task: localDataSource.deleteTodos(listModels, boxName));
+    return action(task: remoteDataSource.deleteTodos(listModels));
   }
 
   @override

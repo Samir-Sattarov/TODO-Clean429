@@ -32,7 +32,7 @@ void setup() {
   locator.registerLazySingleton(() => GetListTodoUsecase(locator()));
   locator.registerLazySingleton(() => SaveTodoUsecase(locator()));
   locator.registerLazySingleton(() => DeleteTodoUsecase(locator()));
-  locator.registerLazySingleton(() => ClearCompletedTodoUsecase(locator()));
+  locator.registerLazySingleton(() => DeleteListTodoUsecase(locator()));
 
   // ================ Repository / Datasource ================ //
 

@@ -118,12 +118,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           return TodoCardWidget(
                             entity: todo,
                             onDone: () async {
+                              final newTodo = todo.copyWith(isDone: true);
                               BlocProvider.of<SaveTodoCubit>(context).save(
-                                todo,
+                                newTodo,
                               );
 
-                              BlocProvider.of<DeleteTodoCubit>(context)
-                                  .delete(todo);
+                              listTodo.remove(todo);
+
+                              setState(() {
+
+                              });
                             },
                           );
                         },

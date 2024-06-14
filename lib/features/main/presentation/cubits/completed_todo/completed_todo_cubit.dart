@@ -10,8 +10,8 @@ part 'completed_todo_state.dart';
 
 class CompletedTodoCubit extends Cubit<CompletedTodoState> {
   final GetListTodoUsecase getListTodoUsecase;
-  final ClearCompletedTodoUsecase clearCompletedTodoUsecase;
-  CompletedTodoCubit(this.getListTodoUsecase, this.clearCompletedTodoUsecase) : super(CompletedTodoInitial());
+  final DeleteListTodoUsecase deleteListTodoUsecase;
+  CompletedTodoCubit(this.getListTodoUsecase, this.deleteListTodoUsecase) : super(CompletedTodoInitial());
 
   load() async {
     emit(CompletedTodoLoading());
@@ -29,10 +29,10 @@ class CompletedTodoCubit extends Cubit<CompletedTodoState> {
     );
   }
 
-  clear() async {
+  clear(List<TodoEntity> listTodo) async {
     emit(CompletedTodoLoading());
 
-    final response = await clearCompletedTodoUsecase.call(NoParams());
+    final response = await deleteListTodoUsecase.call(DeleteListTodoUsecaseParams(listTodo));
 
     response.fold(
           (l) => emit(CompletedTodoError(l.errorMessage)),

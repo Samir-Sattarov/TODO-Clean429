@@ -9,9 +9,8 @@ abstract class MainRepository {
   Future<Either<AppError, List<TodoEntity>>> getListTodo();
 
   Future<Either<AppError, void>> deleteTodos(
-      List<TodoEntity> data, String boxName);
+      List<TodoEntity> data);
 
   Future<Either<AppError, void>> deleteTodo(TodoEntity entity);
 
-  Future<Either<AppError, void>> deleteDataFromBox(String boxName);
 }

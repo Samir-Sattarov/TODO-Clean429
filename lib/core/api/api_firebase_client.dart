@@ -33,4 +33,13 @@ class ApiFirebaseClient {
   }) async {
     await _firestore.collection(collection).doc(id).delete();
   }
+
+  deleteListDataFromCollection(
+    String collection, {
+    required List<String> listId,
+  }) async {
+    for (var element in listId) {
+      await delete(collection, id: element);
+    }
+  }
 }
