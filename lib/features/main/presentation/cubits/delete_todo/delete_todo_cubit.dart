@@ -17,7 +17,7 @@ class DeleteTodoCubit extends Cubit<DeleteTodoState> {
     emit(DeleteTodoLoading());
 
     final response = await deleteTodoUsecase
-        .call(DeleteTodoUsecaseParams(entity, StorageBoxes.todos));
+        .call(DeleteTodoUsecaseParams(entity));
 
     response.fold(
       (l) => emit(DeleteTodoError(l.errorMessage)),

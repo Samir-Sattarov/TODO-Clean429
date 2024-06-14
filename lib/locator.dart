@@ -1,8 +1,10 @@
 import 'package:clean_arch_example/core/utils/todo_storage_service.dart';
 import 'package:clean_arch_example/features/main/data/datasources/main_local_data_source.dart';
+import 'package:clean_arch_example/features/main/data/datasources/main_remote_data_source.dart';
 import 'package:clean_arch_example/features/main/presentation/cubits/counter/counter_cubit.dart';
 import 'package:get_it/get_it.dart';
 
+import 'core/api/api_firebase_client.dart';
 import 'features/main/data/repositories/main_repository_impl.dart';
 import 'features/main/domain/repositories/main_repository.dart';
 import 'features/main/domain/usecases/todo_usecases.dart';
@@ -37,6 +39,7 @@ void setup() {
   locator.registerLazySingleton<MainRepository>(
     () => MainRepositoryImpl(
       locator(),
+      locator(),
     ),
   );
 
@@ -46,10 +49,20 @@ void setup() {
     ),
   );
 
+  locator.registerLazySingleton<MainRemoteDataSource>(
+        () => MainRemoteDataSourceImpl(
+      locator(),
+    ),
+  );
+
   // ================ Core ================ //
 
   locator.registerLazySingleton(
     () => TodoStorageService(),
+  );
+
+  locator.registerLazySingleton(
+    () => ApiFirebaseClient(),
   );
   // ================ External ================ //
 }

@@ -17,11 +17,15 @@ class CompletedTodoCubit extends Cubit<CompletedTodoState> {
     emit(CompletedTodoLoading());
 
     final response = await getListTodoUsecase
-        .call(GetListTodoUsecaseParams(StorageBoxes.completedTodos));
+        .call(NoParams());
 
     response.fold(
       (l) => emit(CompletedTodoError(l.errorMessage)),
-      (r) => emit(CompletedTodoLoaded(r)),
+      (r) {
+
+        final formattedList = r.where((element) => element.isDone == true).toList();
+        emit(CompletedTodoLoaded(formattedList));
+      },
     );
   }
 

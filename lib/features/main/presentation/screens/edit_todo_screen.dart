@@ -39,7 +39,7 @@ class _EditTodoScreenState extends State<EditTodoScreen> {
         ),
         backgroundColor: Colors.blueGrey.shade700,
         title: const Text(
-          'Create Todo',
+          'Edit Todo',
           style: TextStyle(
             color: Colors.white,
           ),

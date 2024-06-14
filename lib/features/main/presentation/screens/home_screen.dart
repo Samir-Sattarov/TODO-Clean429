@@ -3,6 +3,7 @@ import 'package:clean_arch_example/features/main/presentation/cubits/save_todo/s
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/api/api_firebase_client.dart';
 import '../../../../core/utils/error_flush_bar.dart';
 import '../../../../core/utils/success_flash_bar.dart';
 import '../../../../core/utils/todo_storage_service.dart';
@@ -27,7 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     BlocProvider.of<TodoCubit>(context).load();
-
     super.initState();
   }
 
@@ -99,6 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
 
                   if (state is TodoError) {
+                    print(state.message);
                     return Expanded(child: Center(child: Text(state.message)));
                   }
                   final listTodo =
@@ -119,7 +120,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             onDone: () async {
                               BlocProvider.of<SaveTodoCubit>(context).save(
                                 todo,
-                                boxName: StorageBoxes.completedTodos,
                               );
 
                               BlocProvider.of<DeleteTodoCubit>(context)

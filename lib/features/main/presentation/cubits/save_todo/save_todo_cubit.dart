@@ -11,18 +11,15 @@ class SaveTodoCubit extends Cubit<SaveTodoState> {
   final SaveTodoUsecase saveTodoUsecase;
   SaveTodoCubit(this.saveTodoUsecase) : super(SaveTodoInitial());
 
-  save(TodoEntity entity, {String boxName = StorageBoxes.todos}) async {
+  save(TodoEntity entity) async {
     emit(SaveTodoLoading());
 
-    final response = await saveTodoUsecase.call(SaveTodoUsecaseParams(entity, boxName));
+    final response = await saveTodoUsecase.call(SaveTodoUsecaseParams(entity));
 
     response.fold(
       (l) => emit(SaveTodoError(l.errorMessage)),
       (r) => emit(SaveTodoSaved()),
     );
 
-    await Future.delayed(const Duration(seconds: 1));
-
-    emit(SaveTodoInitial());
   }
 }

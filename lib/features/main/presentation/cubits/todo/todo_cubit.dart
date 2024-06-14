@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:clean_arch_example/core/entities/app_error.dart';
+import 'package:clean_arch_example/core/entities/no_params.dart';
 import 'package:clean_arch_example/core/utils/storage_boxes.dart';
 import 'package:clean_arch_example/features/main/data/datasources/main_local_data_source.dart';
 import 'package:clean_arch_example/features/main/data/repositories/main_repository_impl.dart';
@@ -13,8 +14,7 @@ part 'todo_state.dart';
 
 class TodoCubit extends Cubit<TodoState> {
   final GetListTodoUsecase getListTodoUsecase;
-  TodoCubit(this.getListTodoUsecase)
-      : super(TodoInitial());
+  TodoCubit(this.getListTodoUsecase) : super(TodoInitial());
 
   List<TodoEntity> listTodo = [];
 
@@ -27,12 +27,7 @@ class TodoCubit extends Cubit<TodoState> {
   load() async {
     emit(TodoLoading());
 
-    await Future.delayed(const Duration(seconds: 1));
-
-    final Either<AppError, List<TodoEntity>> response =
-        await getListTodoUsecase.call(GetListTodoUsecaseParams(
-      StorageBoxes.todos,
-    ));
+    final response = await getListTodoUsecase.call(NoParams());
 
     response.fold(
       (l) => emit(TodoError(l.errorMessage)),
@@ -44,11 +39,11 @@ class TodoCubit extends Cubit<TodoState> {
           (a, b) => b.createdAt.compareTo(a.createdAt),
         );
 
-        listTodo = formatted;
+        listTodo =
+            formatted.where((element) => element.isDone == false).toList();
         emit(TodoLoaded(listTodo));
       },
     );
-
   }
 
   search(String? value) {
@@ -56,7 +51,7 @@ class TodoCubit extends Cubit<TodoState> {
       load();
     }
     final List<TodoEntity> data = listTodo.where(
-          (element) {
+      (element) {
         return element.title.toLowerCase().contains(value!.toLowerCase());
       },
     ).toList();

@@ -1,3 +1,5 @@
+import '../../../../main.dart';
+
 class TodoEntity {
   final String id;
   final String title;
@@ -17,7 +19,7 @@ class TodoEntity {
 
   factory TodoEntity.empty() {
     return TodoEntity(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      id: uuid.v4(),
       title: "",
       description: "",
       createdAt: DateTime.now(),

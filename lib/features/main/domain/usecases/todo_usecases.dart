@@ -7,16 +7,14 @@ import '../../../../core/usecases/usecase.dart';
 import '../entities/todo_entity.dart';
 import '../repositories/main_repository.dart';
 
-class GetListTodoUsecase
-    extends UseCase<List<TodoEntity>, GetListTodoUsecaseParams> {
+class GetListTodoUsecase extends UseCase<List<TodoEntity>, NoParams> {
   final MainRepository repository;
 
   GetListTodoUsecase(this.repository);
 
   @override
-  Future<Either<AppError, List<TodoEntity>>> call(
-          GetListTodoUsecaseParams params) =>
-      repository.getListTodo(boxName: params.boxName);
+  Future<Either<AppError, List<TodoEntity>>> call(NoParams params) =>
+      repository.getListTodo();
 }
 
 class SaveTodoUsecase extends UseCase<void, SaveTodoUsecaseParams> {
@@ -26,7 +24,7 @@ class SaveTodoUsecase extends UseCase<void, SaveTodoUsecaseParams> {
 
   @override
   Future<Either<AppError, void>> call(SaveTodoUsecaseParams params) {
-    return repository.save(params.entity,boxName: params.boxName);
+    return repository.save(params.entity);
   }
 }
 
@@ -39,7 +37,6 @@ class DeleteTodoUsecase extends UseCase<void, DeleteTodoUsecaseParams> {
   Future<Either<AppError, void>> call(DeleteTodoUsecaseParams params) {
     return repository.deleteTodo(
       params.entity,
-      params.boxName,
     );
   }
 }
@@ -57,21 +54,15 @@ class ClearCompletedTodoUsecase extends UseCase<void, NoParams> {
 
 // ================ Params ================ //
 
-class GetListTodoUsecaseParams {
-  final String boxName;
-
-  GetListTodoUsecaseParams(this.boxName);
-}
+class GetListTodoUsecaseParams {}
 
 class SaveTodoUsecaseParams {
   final TodoEntity entity;
-  final String boxName;
-  SaveTodoUsecaseParams(this.entity, this.boxName);
+  SaveTodoUsecaseParams(this.entity);
 }
 
 class DeleteTodoUsecaseParams {
   final TodoEntity entity;
-  final String boxName;
 
-  DeleteTodoUsecaseParams(this.entity, this.boxName);
+  DeleteTodoUsecaseParams(this.entity);
 }
