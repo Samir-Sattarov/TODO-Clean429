@@ -7,6 +7,7 @@ import '../../../../core/api/api_firebase_client.dart';
 import '../../../../core/utils/error_flush_bar.dart';
 import '../../../../core/utils/success_flash_bar.dart';
 import '../../../../core/utils/todo_storage_service.dart';
+import '../../../../locator.dart';
 import '../../domain/entities/todo_entity.dart';
 import '../cubits/delete_todo/delete_todo_cubit.dart';
 import '../cubits/todo/todo_cubit.dart';
@@ -25,11 +26,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController controllerSearch = TextEditingController();
 
+
+late  final ApiFirebaseClient _client;
   @override
   void initState() {
+
+    _client = locator();
+
     BlocProvider.of<TodoCubit>(context).load();
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +116,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: RefreshIndicator(
                       onRefresh: () async {
                         BlocProvider.of<TodoCubit>(context).load();
+
+
                       },
                       child: ListView.separated(
                         itemCount: listTodo.length,

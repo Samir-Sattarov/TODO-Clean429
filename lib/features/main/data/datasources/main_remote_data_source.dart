@@ -7,14 +7,11 @@ import '../models/todo_model.dart';
 abstract class MainRemoteDataSource {
   save(TodoModel model);
 
-
   Future<List<TodoModel>> getListTodo();
-
 
   deleteTodos(List<TodoModel> data);
 
   deleteTodo(TodoModel entity);
-
 }
 
 class MainRemoteDataSourceImpl implements MainRemoteDataSource {
@@ -30,14 +27,14 @@ class MainRemoteDataSourceImpl implements MainRemoteDataSource {
   @override
   deleteTodos(List<TodoModel> data) async {
     final listId = data.map((element) => element.id).toList();
-    await _client.deleteListDataFromCollection(
-        FirebaseCollections.todos, listId: listId);
+    await _client.deleteListDataFromCollection(FirebaseCollections.todos,
+        listId: listId);
   }
 
   @override
   Future<List<TodoModel>> getListTodo() async {
     final response =
-    await _client.getAllDocumentsFromCollection(FirebaseCollections.todos);
+        await _client.getAllDocumentsFromCollection(FirebaseCollections.todos);
 
     final List<TodoModel> listModel = [];
 
@@ -59,4 +56,3 @@ class MainRemoteDataSourceImpl implements MainRemoteDataSource {
     );
   }
 }
-
